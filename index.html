@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style/dark.css"> <!-- Link para seu arquivo CSS -->
+    <link rel="icon" href="images/favicon.png" type="image/x-icon"> <!-- Link para o favicon -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.24.0/axios.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.css" />
+
+    <title>Cidades Brasileiras</title>
+</head>
+<body>
+
+<div class="header">
+    <div class="header1">
+        <h1>Informações sobre cidades Brasileiras</h1>
+        <h2>Pequise por qualquer cidade e obtenha o tempo, a posição geográfica e um breve texto.</h2>
+    </div>
+    
+</div>
+
+<div class="main">
+    <div class="trysearch">
+        <input type="text" class="search-bar" placeholder="Pesquisar cidade">
+    </div>
+
+    <div class="section-left">
+        <div class="dados-api">
+        </div>
+        <div id="wikicontent">
+        </div>    
+    </div>
+    
+    <div class="section-right">
+        <div id="map">
+        </div>
+    </div>    
+</div>
+
+<footer>
+    Vinícius M Nepomuceno | Utilizando as API's OpenWeather, OpenStreetMap e MediaWiki
+</footer>
+
+
+<script>
+    const mymap = L.map('map').setView([0, 0], 13); // Define a visualização inicial e o nível de zoom
+
+    // Adicionar camada do Stamen Toner (mapa preto e branco)
+    L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/toner/{z}/{x}/{y}.png', {
+        attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(mymap);
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const apiKey = '325b7d5f900b213aa0a501c943b70f8d'; 
+    
+        const searchBar = document.querySelector('.search-bar');
+        const mapElement = document.getElementById('map');
+
+        searchBar.addEventListener('keyup', function(event) {
+            if (event.key === 'Enter') {
+                const cidade = searchBar.value;
+                const url = `https://api.openweathermap.org/data/2.5/weather?q=${cidade}&appid=${apiKey}&units=metric`;
+    
+                // Realiza a requisição à API do OpenWeather
+                fetch(url)
+                    .then(response => response.json())
+                    .then(data => {
+                        // Preenche os dados na seção à esquerda
+                        const horaSolicitacao = new Date(data.dt * 1000).toLocaleTimeString();
+                        const temperatura = `${data.main.temp}°C`;
+                        const umidade = `${data.main.humidity}%`;
+                        
+                        // Traduz a descrição do tempo usando o arquivo "traducoes.json"
+                        const traducoes = {
+                            "clear sky": "Céu limpo",
+                            "few clouds": "Poucas nuvens",
+                            "scattered clouds": "Nuvens dispersas",
+                            "broken clouds": "Nuvens quebradas",
+                            "overcast clouds": "Nuvens nubladas",
+                            "light rain": "Chuva fraca",
+                            "moderate rain": "Chuva moderada",
+                            "heavy rain": "Chuva intensa",
+                            "thunderstorm": "Tempestade",
+                            "snow": "Neve",
+                            "mist": "Neblina"
+                        };
+                        const descricaoTempo = data.weather[0].description;
+                        const traducaoCeu = traducoes[descricaoTempo] || descricaoTempo;
+                        const pressao = `${data.main.pressure} hPa`;
+                        const velocidadeVento = `${data.wind.speed} m/s`;
+    
+                        // Crie a estrutura HTML e insira os dados dinamicamente
+                        const dadosApiDiv = document.querySelector('.dados-api');
+                        dadosApiDiv.innerHTML = `
+                            <h3>Hora da Solicitação: ${horaSolicitacao}</h3>
+                            <p>Temperatura: ${temperatura}</p>
+                            <p>Umidade: ${umidade}</p>
+                            <p>Céu: ${traducaoCeu}</p>
+                            <p>Pressão: ${pressao}</p>
+                            <p>Velocidade do Vento: ${velocidadeVento}</p>
+                        `;
+
+                        fetch(`https://nominatim.openstreetmap.org/search?city=${cidade}&format=json`)
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.length > 0) {
+                                    const latitude = parseFloat(data[0].lat);
+                                    const longitude = parseFloat(data[0].lon);
+                                    mymap.setView([latitude, longitude], 13); // Define a visualização para as coordenadas da cidade
+                                } else {
+                                    console.error('Cidade não encontrada.');
+                                }
+                            })
+                            .catch(error => {
+                                console.error('Erro ao buscar coordenadas da cidade:', error);
+                        });
+
+                        const url = `https://pt.wikipedia.org/w/api.php?action=query&format=json&titles=${cidade}&prop=extracts|pageimages&exintro=true&explaintext=true&formatversion=2&piprop=thumbnail|name&pithumbsize=300&origin=*`;
+
+                        // Realiza a requisição à API da Wikipedia
+                        fetch(url)
+                            .then(response => response.json())
+                            .then(data => {
+                                const page = data.query.pages[0];
+                                const extract = page.extract;
+                                const imageSrc = page.thumbnail ? page.thumbnail.source : '';
+                                const wikicontent = document.getElementById('wikicontent');
+                                wikicontent.innerHTML = `
+                                    <div class="wikicontent-text">
+                                        <h3 class = "tittlekid"> ${cidade} </h3>
+                                        <p>${extract.substring(0, 1000)}...</p>
+                                    </div>
+                                    <div class="wikicontent-image">
+                                        <img src="${imageSrc}" alt="${cidade}">
+                                    </div>
+                                `;
+                            })
+                        .catch(error => {
+                            console.error('Erro na requisição à API da Wikipedia:', error);
+                        });
+                    })
+                    .catch(error => {
+                        console.error('Erro na requisição à API:', error);
+                    });
+            }
+        });
+    });
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+
+        const apiKey = '325b7d5f900b213aa0a501c943b70f8d';
+        const cidade = 'Belo Horizonte';
+        const url = `https://api.openweathermap.org/data/2.5/weather?q=${cidade}&appid=${apiKey}&units=metric`;
+
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                // Preenche os dados na seção à esquerda
+                const horaSolicitacao = new Date(data.dt * 1000).toLocaleTimeString();
+                const temperatura = `${data.main.temp}°C`;
+                const umidade = `${data.main.humidity}%`;
+
+                // Traduz a descrição do tempo usando o arquivo "traducoes.json"
+                const traducoes = {
+                    "clear sky": "Céu limpo",
+                    "few clouds": "Poucas nuvens",
+                    "scattered clouds": "Nuvens dispersas",
+                    "broken clouds": "Nuvens quebradas",
+                    "overcast clouds": "Nuvens nubladas",
+                    "light rain": "Chuva fraca",
+                    "moderate rain": "Chuva moderada",
+                    "heavy rain": "Chuva intensa",
+                    "thunderstorm": "Tempestade",
+                    "snow": "Neve",
+                    "mist": "Neblina"
+                };
+                const descricaoTempo = data.weather[0].description;
+                const traducaoCeu = traducoes[descricaoTempo] || descricaoTempo;
+                const pressao = `${data.main.pressure} hPa`;
+                const velocidadeVento = `${data.wind.speed} m/s`;
+
+                // Crie a estrutura HTML e insira os dados dinamicamente
+                const dadosApiDiv = document.querySelector('.dados-api');
+                dadosApiDiv.innerHTML = `
+                    <h3>Hora da Solicitação: ${horaSolicitacao}</h3>
+                    <p>Temperatura: ${temperatura}</p>
+                    <p>Umidade: ${umidade}</p>
+                    <p>Céu: ${traducaoCeu}</p>
+                    <p>Pressão: ${pressao}</p>
+                    <p>Velocidade do Vento: ${velocidadeVento}</p>
+                `;
+
+                fetch(`https://nominatim.openstreetmap.org/search?city=${cidade}&format=json`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.length > 0) {
+                            const latitude = parseFloat(data[0].lat);
+                            const longitude = parseFloat(data[0].lon);
+                            mymap.setView([latitude, longitude], 13); // Define a visualização para as coordenadas da cidade
+                        } else {
+                            console.error('Cidade não encontrada.');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Erro ao buscar coordenadas da cidade:', error);
+                    });
+
+                const url = `https://pt.wikipedia.org/w/api.php?action=query&format=json&titles=${cidade}&prop=extracts|pageimages&exintro=true&explaintext=true&formatversion=2&piprop=thumbnail|name&pithumbsize=300&origin=*`;
+
+                // Realiza a requisição à API da Wikipedia
+                fetch(url)
+                    .then(response => response.json())
+                    .then(data => {
+                        const page = data.query.pages[0];
+                        const extract = page.extract;
+                        const imageSrc = page.thumbnail ? page.thumbnail.source : '';
+                        const wikicontent = document.getElementById('wikicontent');
+                        wikicontent.innerHTML = `
+                            <div class="wikicontent-text">
+                                <h3 class="tittlekid">${cidade}</h3>
+                                <p>${extract.substring(0, 1000)}...</p>
+                            </div>
+                            <div class="wikicontent-image">
+                                <img src="${imageSrc}" alt="${cidade}">
+                            </div>
+                        `;
+                    })
+                    .catch(error => {
+                        console.error('Erro na requisição à API da Wikipedia:', error);
+                    });
+            })
+            .catch(error => {
+                console.error('Erro na requisição à API:', error);
+            });
+    });
+</script>
+
+</body>
+</html>

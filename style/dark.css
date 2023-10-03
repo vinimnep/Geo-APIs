@@ -1,0 +1,159 @@
+/* Reset CSS básico para remover margens e preenchimentos padrão */
+body, h1, h2, p, button, input {
+    margin: 0;
+    padding: 0;
+    border: none;
+}
+
+/* Defina um espaçamento superior e preenchimento lateral para centralizar o conteúdo */
+body {
+    padding: 3% 10%;
+    background-color: #333; /* Fundo cinza escuro */
+    color: white; /* Cor geral do texto */
+}
+
+/* Estilize o cabeçalho (header) */
+.header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #333; /* Fundo cinza escuro */
+    padding: 20px; /* Espaçamento interno */
+}
+
+/* Centralize o título e o subtítulo */
+.header h1, .header h2 {
+    text-align: center;
+}
+
+.trysearch{
+    display: flex;
+    justify-content: center;
+}
+/* Estilize a barra de pesquisa */
+.search-bar {
+    background-color: #333; /* Fundo cinza escuro */
+    border: 1px solid white; /* Borda branca fina */
+    border-radius: 5px; /* Cantos arredondados */
+    color: white;
+    padding: 12px; /* Espaçamento interno */
+    width: 80%; /* Preencha a largura disponível */
+    box-sizing: border-box;
+}
+
+/* Estilos para a seção à esquerda */
+.section-left {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #333; /* Fundo cinza escuro */
+    color: white;
+    gap: 10px;
+}
+
+.dados-api{
+    border: 1px solid white; /* Borda branca fina */
+    border-radius: 5px; /* Cantos arredondados */
+    padding: 10px;
+}
+
+#wikicontent{
+    margin-top: 20px;
+    border: 1px solid white; /* Borda branca fina */
+    border-radius: 5px; /* Cantos arredondados */
+    padding: 10px; /* Espaçamento interno */
+    width: 65%; 
+
+}
+
+.wikicontent-text {
+    flex: 7; /* Ocupa 70% da largura */
+    padding: 10px; /* Espaçamento interno */
+    text-align: justify;
+}
+
+.wikicontent-image {
+    flex: 3; /* Ocupa 30% da largura */
+    align-self: center;
+    padding: 10px;
+    text-align: center;
+}
+
+.wikicontent-image img {
+    max-width: 100%; /* Tamanho máximo para imagens */
+    height: auto; /* Manter proporção da imagem */
+}
+
+/* Estilos para os elementos dentro da seção à esquerda */
+.section-left h3, .tittlekid {
+    font-size: 18px; /* Tamanho da fonte para o título */
+    text-align: center;
+}
+
+.section-left p {
+    font-size: 16px; /* Tamanho da fonte para os parágrafos */
+}
+
+/* Estilos para a seção à direita */
+.section-right {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #333; /* Fundo cinza escuro */
+    color: white; /* Cor das letras */
+    border: 1px solid white; /* Borda branca fina */
+    border-radius: 5px; /* Cantos arredondados */
+    padding: 10px; /* Espaçamento interno */
+    width: auto; /* Largura ajustada ao conteúdo */
+}
+
+/* Estilos para o elemento do mapa */
+#map {
+    width: 100%; /* Largura total disponível */
+    height: 400px; /* Altura do mapa */
+}
+
+footer {
+    background-color: #333; /* Cor de fundo */
+    color: white; /* Cor do texto */
+    text-align: center; /* Alinhamento de texto centralizado */
+    padding: 10px; /* Espaçamento interno */
+    display: flex; /* Usar flexbox para alinhamento vertical e horizontal */
+    justify-content: center; /* Centralizar horizontalmente */
+    align-items: center; /* Centralizar verticalmente */
+    margin-top: 50px;
+}
+
+@media screen and (max-width: 768px) {
+    .header1 h1 {
+        font-size: 18px; /* Tamanho reduzido da fonte para telas menores */
+    }
+
+    .header1 h2 {
+        font-size: 14px; /* Tamanho reduzido da fonte para telas menores */
+    }
+
+    .section-left {
+        margin-top: 10px;
+        display: flex;
+        flex-direction: column; /* Altera para column em telas menores */
+        align-items: center; /* Centraliza conteúdo na vertical */
+    }
+
+    .dados-api{
+        width: auto;
+    }
+    
+    #wikicontent {
+        width: 100%; /* Define largura total para as seções */
+        margin-top: 10px;
+        
+    }
+
+    .section-right{
+        margin-top: 10pix;
+    }
+
+
+}
