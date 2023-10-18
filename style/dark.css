@@ -7,7 +7,6 @@ body, h1, h2, p, button, input {
 
 /* Defina um espaçamento superior e preenchimento lateral para centralizar o conteúdo */
 body {
-    padding: 3% 10%;
     background-color: #333; /* Fundo cinza escuro */
     color: white; /* Cor geral do texto */
     overflow-x: hidden;
@@ -16,6 +15,7 @@ body {
 /* Estilize o cabeçalho (header) */
 .header {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     background: url('/images/mapa_background.jpg') rgba(255, 0, 0, 0.6) no-repeat center center;
