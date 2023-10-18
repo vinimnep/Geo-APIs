@@ -23,6 +23,7 @@ body {
     background-blend-mode: multiply;
     width: 100vw;
     height: 100vh;
+    gap: 20px;
 }
 
 /* Centralize o título e o subtítulo */
@@ -32,7 +33,7 @@ body {
 
 /* Estilize a barra de pesquisa */
 .search-bar {
-    background-color: #333; /* Fundo cinza escuro */
+    background-color: white; 
     border: 1px solid white; /* Borda branca fina */
     border-radius: 5px; /* Cantos arredondados */
     color: white;
