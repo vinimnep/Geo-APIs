@@ -41,6 +41,11 @@ body {
     box-sizing: border-box;
 }
 
+.main{
+    padding: 10% 3%;
+}
+
+
 /* Estilos para a seção à esquerda */
 .section-left {
     display: flex;
