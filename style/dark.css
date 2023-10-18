@@ -36,14 +36,14 @@ body {
     background-color: white; 
     border: 1px solid white; /* Borda branca fina */
     border-radius: 5px; /* Cantos arredondados */
-    color: white;
+    color: black;
     padding: 12px; /* Espaçamento interno */
     width: 80%; /* Preencha a largura disponível */
     box-sizing: border-box;
 }
 
 .main{
-    padding: 10% 3%;
+    padding: 3% 10%;
 }
 
 
