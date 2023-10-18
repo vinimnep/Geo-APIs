@@ -44,6 +44,7 @@ body {
 /* Estilos para a seção à esquerda */
 .section-left {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     background-color: #333; /* Fundo cinza escuro */
@@ -62,7 +63,6 @@ body {
     border: 1px solid white; /* Borda branca fina */
     border-radius: 5px; /* Cantos arredondados */
     padding: 10px; /* Espaçamento interno */
-    width: 65%; 
 
 }
 
