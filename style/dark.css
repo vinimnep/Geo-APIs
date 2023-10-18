@@ -10,6 +10,7 @@ body {
     padding: 3% 10%;
     background-color: #333; /* Fundo cinza escuro */
     color: white; /* Cor geral do texto */
+    overflow-x: hidden;
 }
 
 /* Estilize o cabeçalho (header) */
@@ -17,8 +18,11 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #333; /* Fundo cinza escuro */
-    padding: 20px; /* Espaçamento interno */
+    background: url('/images/mapa_background.jpg') rgba(255, 0, 0, 0.6) no-repeat center center;
+    background-size: cover;
+    background-blend-mode: multiply;
+    width: 100vw;
+    height: 100vh;
 }
 
 /* Centralize o título e o subtítulo */
@@ -26,10 +30,6 @@ body {
     text-align: center;
 }
 
-.trysearch{
-    display: flex;
-    justify-content: center;
-}
 /* Estilize a barra de pesquisa */
 .search-bar {
     background-color: #333; /* Fundo cinza escuro */
